@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+<div id="map" style='height: 100%; width: 100%;'></div>
+<script type='text/javascript'>
+var map = L.map('map').setView([51.505, -0.09], 5);
+var url = "https://api2.ordnancesurvey.co.uk/mapping_api/v1/service/wmts";
+var apiKey = "KvXJlA0AohalsYFKIN3brQKYcohQq3f5";
+
+var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+var osgb = L.tileLayer(url + '?key='+apiKey+'&height=256&width=256&tilematrixSet=EPSG%3A3857&version=1.0.0&style=&layer=Outdoor 3857&SERVICE=WMTS&REQUEST=GetTile&format=image/png&TileMatrix=EPSG:3857:{z}&TileRow={y}&TileCol={x}', {
+    maxZoom: 20,
+    minZoom: 7, 
+    continuousWorld: true,
+}).addTo(map);
+
+//var overlayMaps = {
+//    "Ordnance Survey": osgb,
+//    "Open Street Map": osm,
+//};
+
+//L.control.layers(overlayMaps).addTo(map);
+
+//marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+//circle.bindPopup("I am a circle.");
+//polygon.bindPopup("I am a polygon.");
+
+
+var myLayers = {
+HousingSites: L.tileLayer.wms('https://w3.blackpool.gov.uk/geoserver/ows?service=WMS', {
+   layers: 'inspire:shlaa',
+   format: 'image/png',
+   transparent: 'true',
+}),
+
+GreenBelt: L.tileLayer.wms('https://w3.blackpool.gov.uk/geoserver/ows?service=WMS', {
+   layers: 'inspire:greenbelt',
+   format: 'image/png',
+   transparent: 'true',
+}),
+
+FrenchBathymetry: L.tileLayer.wms('http://services.data.shom.fr/INSPIRE/wms/r?', {
+   layers: 'BATHY-DALLE_PYR-PNG_3857_WMSR',
+   format: 'image/png',
+   transparent: 'true',
+}),
+
+AustralianParcels: L.tileLayer.wms('http://services.ga.gov.au/gis/services/Cadastral_Parcels_WM/MapServer/WmsServer?', {
+   layers: 'Cadastral_Parcels',
+   format: 'image/png',
+   transparent: 'true',
+}),
+
+IowaGeology: L.tileLayer.wms('http://geothermal.isgs.illinois.edu/ArcGIS/services/aasggeothermal/IABedrockGeology/MapServer/WMSServer?', {
+   layers: 'BedrockGeology',
+   format: 'image/png',
+   transparent: 'true',
+}),
+
+TPOs: L.tileLayer.wms('https://w3.blackpool.gov.uk/geoserver/ows?service=WMS', {
+   layers: 'inspire:tpo',
+   format: 'image/png',
+   transparent: 'true',
+})
+};
+
+L.control.layers(myLayers).addTo(map);
+
+myLayers.HousingSites.addTo(map);
+
+
+</script>
